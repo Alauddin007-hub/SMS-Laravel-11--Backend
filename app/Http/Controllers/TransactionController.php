@@ -15,8 +15,9 @@ class TransactionController extends Controller
     public function create()
     {
         $customers = Customer::all();
+        $books = Book::all();
         $stockDetails = Stock_Detail::with('book')->get();
-        return view('backend.sale.pos_application', compact('customers', 'stockDetails'));
+        return view('backend.sale.pos_application', compact('customers', 'stockDetails','books'));
     }
 
     public function searchBooks(Request $request)

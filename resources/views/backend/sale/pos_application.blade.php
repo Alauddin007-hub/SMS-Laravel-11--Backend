@@ -42,7 +42,7 @@
                                 </div>
 
                                 <div class="form-group row">
-                                    <label for="book_search" class="col-lg-2">Search Product:</label>
+                                    <label for="book_search" class="col-lg-2">Search Book:</label>
                                     <div class="col-lg-5">
                                         <div class="input-group">
                                             <input type="text" name="book_search" id="book_search" class="form-control" placeholder="Search for a book">

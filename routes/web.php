@@ -70,6 +70,6 @@ Route::post('/transactions/store', [TransactionController::class, 'store'])->nam
 Route::get('/pos', function () {
     return view('backend.sale.pos_application');
 });
-Route::get('/posta', function () {
-    return view('backend.pos_template.pos');
+Route::get('/search', function () {
+    return view('backend.sale.search_dropdwon');
 });

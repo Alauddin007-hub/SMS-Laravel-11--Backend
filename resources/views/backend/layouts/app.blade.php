@@ -19,6 +19,9 @@
     <link rel="stylesheet" href="{{asset('')}}assets/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
     <link rel="stylesheet" href="{{asset('')}}assets/plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
     <link rel="stylesheet" href="{{asset('')}}assets/plugins/datatables-buttons/css/buttons.bootstrap4.min.css">
+
+    <!-- <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" /> -->
+    @yield('style');
 </head>
 
 <body class="hold-transition dark-mode sidebar-mini layout-fixed layout-navbar-fixed layout-footer-fixed">
@@ -110,6 +113,8 @@
 
 <script src="{{asset('')}}assets/plugins/jquery-validation/jquery.validate.min.js"></script>
 <script src="{{asset('')}}assets/plugins/jquery-validation/additional-methods.min.js"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
 </body>
 
 </html>
