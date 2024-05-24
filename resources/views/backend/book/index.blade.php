@@ -1,6 +1,6 @@
 @extends ('backend.layouts.app')
 
-@section('title', 'Writer')
+@section('title', 'Books')
 
 @section('content')
 
@@ -52,6 +52,7 @@
                     <th>Book Bangla Name</th>
                     <th>Book Categoty Name</th>
                     <th>Book Writer Name</th>
+                    <th>Price</th>
                     <th>Short Description</th>
                     <th>Publish Date</th>
                     <th>Book of page</th>
@@ -69,6 +70,7 @@
                     <td>{{$item->book_bangla_name}}</td>
                     <td>{{$item->category->name}}</td>
                     <td>{{$item->writer->writer_name}}</td>
+                    <td>{{$item->price}}</td>
                     <td>{{$item->short_description}}</td>
                     <td>{{$item->publising_date}}</td>
                     <td>{{$item->book_of_page}}</td>

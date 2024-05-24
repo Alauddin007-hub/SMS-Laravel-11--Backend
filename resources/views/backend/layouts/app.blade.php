@@ -21,6 +21,9 @@
     <link rel="stylesheet" href="{{asset('')}}assets/plugins/datatables-buttons/css/buttons.bootstrap4.min.css">
 
     <!-- <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" /> -->
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/css/select2.min.css" rel="stylesheet" />
+    
+    
     @yield('style');
 </head>
 
@@ -93,6 +96,7 @@
     <script src="{{asset('')}}assets/plugins/datatables-buttons/js/buttons.print.min.js"></script>
     <script src="{{asset('')}}assets/plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
 
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js"></script>
     <script>
     $(function () {
         $("#example1").DataTable({

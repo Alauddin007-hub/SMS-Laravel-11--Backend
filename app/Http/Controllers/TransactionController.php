@@ -17,39 +17,52 @@ class TransactionController extends Controller
         $customers = Customer::all();
         $books = Book::all();
         $stockDetails = Stock_Detail::with('book')->get();
-        return view('backend.sale.pos_application', compact('customers', 'stockDetails','books'));
+        return view('backend.sale.pos_application', compact('customers', 'stockDetails', 'books'));
     }
 
     public function searchBooks(Request $request)
     {
         $query = $request->get('query');
-        $stockDetails = Stock_Detail::whereHas('book', function ($q) use ($query) {
-            $q->where('book_bangla_name', 'LIKE', "%{$query}%")
-                ->orWhere('book_english_name', 'LIKE', "%{$query}%");
-        })->with('book')->get();
+        $book = Book::where('book_bangla_name', 'LIKE', "%{$query}%")
+            ->orWhere('book_english_name', 'LIKE', "%{$query}%")
+            ->get();
 
-        return response()->json($stockDetails);
+        return response()->json($book);
     }
 
     public function store(Request $request)
     {
+        // Validate request data
+        $request->validate([
+            'books' => 'required|array',
+            'books.*.book_id' => 'required|exists:books,id',
+            'books.*.quantity' => 'required|integer|min:1',
+            'books.*.subtotal' => 'required|numeric|min:0',
+            'customer_id' => 'nullable|exists:customers,id',
+            'name' => 'nullable|required_without:customer_id|string|max:255',
+            'phone' => 'nullable|required_without:customer_id|string|max:255',
+            'address' => 'nullable|required_without:customer_id|string|max:255',
+        ]);
+
+        if ($errors = $request->errors()) {
+            dd($errors);
+        }
+
         $books = $request->input('books');
-        // dd($books);
+        dd($books);
 
-        // Retrieve customer information from the request
-        // $name = $request->input('name');
-        // $phone = $request->input('phone');
-        // $address = $request->input('address');
-
-        // // Create the customer
-        // $customer = Customer::create([
-        //     'name' => $name,
-        //     'phone' => $phone,
-        //     'address' => $address,
-        //     // You may need to adjust this depending on your authentication setup
-        //     'user_id' => auth()->id()
-        // ]);
-
+        // Handle customer selection or creation
+        $customerId = $request->input('customer_id');
+        if (!$customerId) {
+            $customer = Customer::create([
+                'name' => $request->input('name'),
+                'phone' => $request->input('phone'),
+                'address' => $request->input('address'),
+                'user_id' => auth()->id(),
+            ]);
+            $customerId = $customer->id;
+        }
+        dd($customerId);
 
         // Calculate total quantity and total price
         $totalQuantity = 0;
@@ -65,40 +78,39 @@ class TransactionController extends Controller
             'total_quantity' => $totalQuantity,
             'total_price' => $totalPrice,
             'discount' => $request->input('discount', 0),
-            // 'customer_id' => $request->customer_id, // Associate the sale with the customer
-            // You may need to adjust this depending on your authentication setup
-            'user_id' => auth()->id()
+            'customer_id' => $customerId,
+            'user_id' => auth()->id(),
         ]);
+        dd($sale);
 
         $uniCode = IdGenerator::generate(['table' => 'stock_details', 'field' => 'uni_code', 'length' => 7, 'prefix' => 'Sale#']);
 
         // Create sale details and update stock
         foreach ($books as $book) {
-            SaleDetails::create([
+            $saleDetail = SaleDetails::create([
                 'book_id' => $book['book_id'],
                 'sales_id' => $sale->id,
                 'uni_code' => $uniCode,
-                'customer_id' => $request->customer_id,
+                'customer_id' => $customerId,
                 'quantity' => $book['quantity'],
                 'price' => $book['price'],
                 'subtotal' => $book['subtotal'],
-                // You may need to adjust this depending on your authentication setup
-                'user_id' => auth()->id()
+                'user_id' => auth()->id(),
             ]);
-
-            // Update the stock
+            dd($saleDetail);
+        
             $stockDetail = Stock_Detail::where('book_id', $book['book_id'])->first();
             if ($stockDetail) {
+                if ($stockDetail->quantity < $book['quantity']) {
+                    return redirect()->back()->withErrors(['message' => 'Not enough stock for book ID ' . $book['book_id']]);
+                }
                 $stockDetail->quantity -= $book['quantity'];
                 $stockDetail->save();
-            } 
-            // else 
-            // {
-            //     // Handle the case where stock detail for the book is not found
-            //     // This could be logging an error or other appropriate action
-            // }
+            } else {
+                return redirect()->back()->withErrors(['message' => 'Stock detail not found for book ID ' . $book['book_id']]);
+            }
         }
 
-        return redirect()->route('transactions.index')->with('success', 'Transaction created successfully.');
+        // return redirect()->route('transactions.index')->with('success', 'Transaction created successfully.');
     }
 }

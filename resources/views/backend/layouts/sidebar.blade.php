@@ -193,7 +193,7 @@
                                 <li class="nav-item">
                                     <a href="{{route('store.create')}}" class="nav-link">
                                         <i class="far fa-circle nav-icon"></i>
-                                        <p>Re-Stock</p>
+                                        <p>Add Stock</p>
                                         <!-- <span class="right badge badge-danger">New</span> -->
                                     </a>
                                 </li>

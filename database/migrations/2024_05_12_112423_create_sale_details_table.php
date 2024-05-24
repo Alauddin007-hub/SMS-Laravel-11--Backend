@@ -18,8 +18,8 @@ return new class extends Migration
             $table->integer('uni_code');
             $table->tinyInteger('customer_id');
             $table->integer('quantity');
-            $table->integer('price');
-            $table->integer('subtotal');
+            $table->decimal('price', 10, 2);
+            $table->decimal('subtotal', 10, 2);
             $table->integer('user_id')->nullable();
             $table->boolean('status')->default(0);
             $table->timestamp('created_at')->useCurrent();

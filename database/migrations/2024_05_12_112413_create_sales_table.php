@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('sales', function (Blueprint $table) {
             $table->id();
             $table->string('total_quantity');
-            $table->string('total_price');
+            $table->decimal('total_price', 10, 2);
             $table->integer('discount');
             $table->boolean('status')->default(0);
             $table->timestamp('created_at')->useCurrent();

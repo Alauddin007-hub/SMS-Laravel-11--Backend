@@ -35,7 +35,7 @@
                                         <select name="customer_id" id="customer_id" class="form-control">
                                             <option selected>Select Customer</option>
                                             @foreach ($customers as $customer)
-                                                <option value="{{ $customer->id }}">{{ $customer->name }}</option>
+                                            <option value="{{ $customer->id }}">{{ $customer->name }}</option>
                                             @endforeach
                                         </select>
                                     </div>
@@ -45,9 +45,9 @@
                                     <label for="book_search" class="col-lg-2">Search Book:</label>
                                     <div class="col-lg-5">
                                         <div class="input-group">
-                                            <input type="text" name="book_search" id="book_search" class="form-control" placeholder="Search for a book">
+                                            <select class="form-control livesearch" name="book_id"></select>
                                             <span class="input-group-btn">
-                                                <button type="button" class="btn btn-success btn-flat" data-toggle="modal" data-target="#modal-book"><i class="fa fa-search-plus"></i></button>
+                                                <button type="button" class="btn btn-success btn-flat" id="add-product-btn"><i class="fa fa-search-plus"></i></button>
                                             </span>
                                         </div>
                                     </div>
@@ -64,7 +64,7 @@
                                                         <th>Quantity</th>
                                                         <th>Price</th>
                                                         <th>Discount (%)</th>
-                                                        <th>Total Amount</th>
+                                                        <th>Sub-total</th>
                                                         <th width="15%"><i class="fa fa-cog"></i></th>
                                                     </tr>
                                                 </thead>
@@ -94,109 +94,111 @@
     </section>
 </div>
 
-<div class="modal fade" id="modal-book" tabindex="-1" role="dialog" aria-labelledby="modal-book">
-    <div class="modal-dialog modal-lg" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title">Select Product</h4>
-            </div>
-            <div class="modal-body">
-                <input type="text" id="book-search-input" class="form-control" placeholder="Search for books...">
-                <table class="table table-striped table-bordered table-product table-hover">
-                    <thead>
-                        <tr>
-                            <th width="5%">#</th>
-                            <th>Code</th>
-                            <th>Name</th>
-                            <th>Purchase Price</th>
-                            <th><i class="fa fa-cog"></i></th>
-                        </tr>
-                    </thead>
-                    <tbody id="book-list">
-                        <!-- Book search results will be dynamically added here -->
-                    </tbody>
-                </table>
-            </div>
-        </div>
-    </div>
-</div>
-
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script>
-    let saleDetails = [];
+    $(document).ready(function() {
+        let saleDetails = [];
 
-    document.getElementById('book_search').addEventListener('keyup', function() {
-        const query = this.value;
-        if (query.length >= 2) {
-            fetch(`/books/search?query=${query}`)
-                .then(response => response.json())
-                .then(data => {
-                    let html = '';
-                    data.forEach((item, index) => {
-                        html += `
-                            <tr>
-                                <td width="5%">${index + 1}</td>
-                                <td>${item.book_id}</td>
-                                <td>${item.book.book_bangla_name}</td>
-                                <td>${item.price}</td>
-                                <td>
-                                    <button type="button" class="btn btn-primary btn-xs btn-flat" onclick="selectProduct(${item.book.id}, '${item.book.book_bangla_name}', ${item.price})">
-                                        <i class="fa fa-check-circle"></i> Select
-                                    </button>
-                                </td>
-                            </tr>
-                        `;
-                    });
-                    document.getElementById('book-list').innerHTML = html;
-                });
+        $('.livesearch').select2({
+            placeholder: 'Select book',
+            allowClear: true,
+            ajax: {
+                url: '/books/search',
+                dataType: 'json',
+                delay: 250,
+                processResults: function(data) {
+                    return {
+                        results: $.map(data, function(item) {
+                            return {
+                                text: item.book_bangla_name,
+                                // text: item.book_english_name,
+                                id: item.id,
+                                price: item.price // Make sure to include price in the ajax response
+                            }
+                        })
+                    };
+                },
+                cache: true
+            }
+        });
+
+        $('#add-product-btn').on('click', function() {
+            const selectedOption = $('.livesearch').select2('data')[0];
+            if (selectedOption) {
+                selectProduct(selectedOption.id, selectedOption.text, selectedOption.price);
+            } else {
+                alert('Please select a book');
+            }
+        });
+
+        function selectProduct(bookId, bookName, price) {
+            const row = `
+                <tr>
+                    <td>${saleDetails.length + 1}</td>
+                    <td>
+                        <input type="number" hidden name="books[${saleDetails.length}][book_id]" class="form-control" value="${bookId}">
+                        ${bookName}
+                    </td>
+                    <td><input type="number" name="books[${saleDetails.length}][quantity]" class="form-control" onchange="updateTotal(${saleDetails.length}, ${price})" min="1" value="1"></td>
+                    <td>
+                        <input type="number" hidden name="books[${saleDetails.length}][price]" class="form-control" value="${price}">
+                        ${price}
+                    </td>
+                    <td><input type="number" name="books[${saleDetails.length}][discount]" class="form-control" onchange="updateTotal(${saleDetails.length}, ${price})" value="0"></td>
+                    <td><input type="text" name="books[${saleDetails.length}][subtotal]" class="form-control" value="${price}" readonly></td>
+                    <td><button type="button" class="btn btn-danger btn-xs" onclick="removeProduct(${saleDetails.length})"><i class="fa fa-times"></i></button></td>
+                </tr>
+            `;
+
+            document.getElementById('sale-details').insertAdjacentHTML('beforeend', row);
+
+            saleDetails.push({
+                bookId,
+                bookName,
+                price,
+                quantity: 1,
+                discount: 0,
+                subtotal: price
+            });
+            updateTotal();
         }
-    });
 
-    function selectProduct(bookId, bookName, price) {
-        const row = `
-            <tr>
-                <td>${saleDetails.length + 1}</td>
-                <td>
-                <input type="number" hidden name="books[][book_id]" class="form-control"  min="1" value="${bookId}">
-                ${bookName}
-                </td>
-                <td><input type="number" name="books[${saleDetails.length}][quantity]" class="form-control" onchange="updateTotal(${saleDetails.length}, ${price})" min="1" value="1"></td>
-                <td>
-                <input type="number" hidden name="books[][price]" class="form-control"  min="1" value="${price}">
-                ${price}
-                </td>
-                <td><input type="number" name="books[${saleDetails.length}][discount]" class="form-control" value="0"></td>
-                <td><input type="text" name="books[${saleDetails.length}][subtotal]" class="form-control" value="${price}" readonly></td>
-                <td><button type="button" class="btn btn-danger btn-xs" onclick="removeProduct(${saleDetails.length})"><i class="fa fa-times"></i></button></td>
-            </tr>
-        `;
-
-        document.getElementById('sale-details').insertAdjacentHTML('beforeend', row);
-
-        saleDetails.push({ bookId, bookName, price, quantity: 1, subtotal: price });
-        updateTotal();
-    }
-
-    function updateTotal(index = null, price = null) {
-        if (index !== null && price !== null) {
+        window.updateTotal = function(index, price) {
             const quantity = document.getElementsByName(`books[${index}][quantity]`)[0].value;
             const discount = document.getElementsByName(`books[${index}][discount]`)[0].value;
             const subtotal = (quantity * price) * ((100 - discount) / 100);
             document.getElementsByName(`books[${index}][subtotal]`)[0].value = subtotal.toFixed(2);
             saleDetails[index].quantity = quantity;
+            saleDetails[index].discount = discount;
             saleDetails[index].subtotal = subtotal;
+            calculateTotal();
         }
 
-        const total = saleDetails.reduce((sum, item) => sum + parseFloat(item.subtotal), 0);
-        document.getElementById('total-price').innerText = total.toFixed(2);
-    }
+        function calculateTotal() {
+            const total = saleDetails.reduce((sum, item) => sum + parseFloat(item.subtotal), 0);
+            document.getElementById('total-price').innerText = total.toFixed(2);
+        }
 
-    function removeProduct(index) {
-        saleDetails.splice(index, 1);
-        const table = document.getElementById('sale-details');
-        table.deleteRow(index);
-        updateTotal();
-    }
+        window.removeProduct = function(index) {
+            saleDetails.splice(index, 1);
+            const table = document.getElementById('sale-details');
+            table.deleteRow(index);
+            reindexTable();
+            calculateTotal();
+        }
+
+        function reindexTable() {
+            const rows = document.querySelectorAll('#sale-details tr');
+            rows.forEach((row, index) => {
+                row.cells[0].innerText = index + 1;
+                row.cells[1].querySelector('input[name^="books"]').setAttribute('name', `books[${index}][book_id]`);
+                row.cells[2].querySelector('input[name^="books"]').setAttribute('name', `books[${index}][quantity]`);
+                row.cells[4].querySelector('input[name^="books"]').setAttribute('name', `books[${index}][discount]`);
+                row.cells[5].querySelector('input[name^="books"]').setAttribute('name', `books[${index}][subtotal]`);
+                row.cells[6].querySelector('button').setAttribute('onclick', `removeProduct(${index})`);
+            });
+        }
+    });
 </script>
 
 @endsection
