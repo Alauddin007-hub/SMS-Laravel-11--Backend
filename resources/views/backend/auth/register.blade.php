@@ -26,7 +26,7 @@
       <form action="{{ route('register') }}" method="post">
       @csrf
         <div class="input-group mb-3">
-          <input type="text" name="name" class="form-control" placeholder="Full name">
+          <input type="text" name="name" class="form-control" value="{{ old('name') }}" placeholder="Full name">
           <div class="input-group-append">
             <div class="input-group-text">
               <span class="fas fa-user"></span>
@@ -34,7 +34,7 @@
           </div>
         </div>
         <div class="input-group mb-3">
-          <input type="email" name="email" class="form-control" placeholder="Email">
+          <input type="email" name="email" class="form-control" value="{{ old('email') }}" placeholder="Email">
           <div class="input-group-append">
             <div class="input-group-text">
               <span class="fas fa-envelope"></span>
@@ -57,6 +57,19 @@
             </div>
           </div>
         </div>
+        <div class="input-group mb-3">
+          <select name="user_type" id="">
+            <option selected>Choose one</option>
+            <option value="1">Super Admin</option>
+            <option value="2">Admin</option>
+            <option value="3">NormalUser</option>
+          </select>
+          <div class="input-group-append">
+            <div class="input-group-text">
+              <span class="fas fa-envelope"></span>
+            </div>
+          </div>
+        </div>
         <div class="row">
           <div class="col-8">
             <div class="icheck-primary">
@@ -74,7 +87,7 @@
         </div>
       </form>
 
-      <a href="login.html" class="text-center">I already have a membership</a>
+      <a href="{{route('login')}}" class="text-center">I already have a membership</a>
     </div>
     <!-- /.form-box -->
   </div><!-- /.card -->

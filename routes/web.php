@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BookController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CustomerController;
@@ -11,12 +12,19 @@ use Illuminate\Support\Facades\Route;
 // Route::get('/', function () {
 //     return view('welcome');
 // });
-Route::get('/', function () {
-    return view('backend.auth.login');
-});
+// Route::get('/', function () {
+//     return view('backend.auth.login');
+// });
 Route::get('/dashboard', function () {
     return view('backend.dashboard.super_admin');
 });
+
+// Authentication
+Route::get('/create', [AuthController::class, 'index'])->name('registration');
+Route::post('/register', [AuthController::class, 'registration'])->name('register');
+Route::get('/', [AuthController::class, 'create'])->name('login');
+Route::pot('/login/store', [AuthController::class, 'login'])->name('login.store');
+Route::get('/forget', [AuthController::class, 'forgot'])->name('forgot');
 
 // Writer
 Route::get('/lekhok', [WriterController::class, 'index'])->name('lekhok.index');
@@ -59,7 +67,7 @@ Route::get('/customer/edit/{id}', [CustomerController::class, 'edit'])->name('cu
 Route::post('/customer/update/{id}', [CustomerController::class, 'update'])->name('customer.update');
 Route::get('/customer/delete/{id}', [CustomerController::class, 'destroy'])->name('customer.delete');
 
-
+// Transaction or Sales
 Route::get('/transactions/create', [TransactionController::class, 'create'])->name('transactions.create');
 
 Route::get('/books/search', [TransactionController::class, 'searchBooks'])->name('books.search');
