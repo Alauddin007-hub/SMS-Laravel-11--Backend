@@ -80,7 +80,7 @@
     <!-- AdminLTE for demo purposes -->
     <script src="{{asset('')}}assets/dist/js/demo.js"></script>
     <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
-    <script src="{{asset('')}}assets/dist/js/pages/dashboard2.js"></script>
+    <!-- <script src="{{asset('')}}assets/dist/js/pages/dashboard2.js"></script> -->
 
 
     <script src="{{asset('')}}assets/plugins/datatables/jquery.dataTables.min.js"></script>

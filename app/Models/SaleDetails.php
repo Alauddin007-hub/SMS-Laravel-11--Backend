@@ -21,4 +21,16 @@ class SaleDetails extends Model
         'user_id',
         'status',
     ];
+
+    public function book(){
+        return $this->belongsTo(Book::class);
+    }
+
+    public function sale(){
+        return $this->belongsTo(Sale::class);
+    }
+
+    public function customer(){
+        return $this->belongsTo(Customer::class);
+    }
 }
