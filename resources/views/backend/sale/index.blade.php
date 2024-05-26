@@ -1,6 +1,6 @@
 @extends ('backend.layouts.app')
 
-@section('title', 'Writer')
+@section('title', 'Sales List')
 
 @section('content')
 
@@ -10,12 +10,12 @@
     <div class="container-fluid">
       <div class="row mb-2">
         <div class="col-sm-6">
-          <h1>DataTables</h1>
+          <h1>Sales List</h1>
         </div>
         <div class="col-sm-6">
           <ol class="breadcrumb float-sm-right">
-            <li class="breadcrumb-item"><a href="#">Home</a></li>
-            <li class="breadcrumb-item active">DataTables</li>
+            <li class="breadcrumb-item"><a href="#">Transaction</a></li>
+            <li class="breadcrumb-item active">Sales list</li>
           </ol>
         </div>
       </div>
@@ -30,9 +30,9 @@
 
           <div class="card">
             <div class="card-header ">
-              <h3 class="card-title">Book Information</h3><br>
+              <h3 class="card-title">Book Sales List</h3><br>
               <div>
-                <a href="{{route('boi.create')}}" class="btn btn-info"> Add Writer</a>
+                <a href="{{route('transactions.create')}}" class="btn btn-info">New Transaction</a>
               </div>
             </div>
 
@@ -47,36 +47,24 @@
                 <thead>
                   <tr>
                     <th>#SL</th>
-                    <th>Book Cover Photo</th>
                     <th>Book English Name</th>
                     <th>Book Bangla Name</th>
-                    <th>Book Categoty Name</th>
-                    <th>Book Writer Name</th>
-                    <th>Short Description</th>
-                    <th>Publish Date</th>
-                    <th>Book of page</th>
-                    <th>Action</th>
+                    <th>Customer Name</th>
+                    <th>Unit</th>
+                    <th>Price</th>
+                    <th>Sub-Total</th>
                   </tr>
                 </thead>
                 <tbody>
-                  @foreach ( $books as $key=>$item )
+                  @foreach ( $sales as $key=>$item )
                   <tr>
                     <td>{{++$key}}</td>
-                    <td>
-                    <a href="javascript:void(0)" class="avatar"><img alt="avatar" src="{{asset('book/'.$item->image)}}" width="60px" height="90px"></a>
-                    </td>
-                    <td>{{$item->book_english_name}}</td>
-                    <td>{{$item->book_bangla_name}}</td>
-                    <td>{{$item->category->name}}</td>
-                    <td>{{$item->writer->writer_name}}</td>
-                    <td>{{$item->short_description}}</td>
-                    <td>{{$item->publising_date}}</td>
-                    <td>{{$item->book_of_page}}</td>
-                    <td>
-                      <a class="btn btn-secondary" href="{{route('boi.edit', $item->id)}}"><i class="fa-solid fa-pen-to-square"></i></a>
-
-                      <a class="btn btn-danger" href="{{route('boi.delete', $item->id)}}" onclick="return confirm('Are you sure to delete')"><i class="fa-solid fa-trash"></i></a>
-                    </td>
+                    <td>{{$item->book->book_english_name}}</td>
+                    <td>{{$item->book->book_bangla_name}}</td>
+                    <td>{{$item->customer->name}}</td>
+                    <td>{{$item->quantity}}</td>
+                    <td>{{$item->price}}</td>
+                    <td>{{$item->subtotal}}</td>
                   </tr>
                   @endforeach
 

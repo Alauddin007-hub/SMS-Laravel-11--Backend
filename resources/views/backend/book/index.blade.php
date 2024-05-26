@@ -62,26 +62,26 @@
                 <tbody>
                   @foreach ( $books as $key=>$item )
                   <tr>
-                    <td>{{++$key}}</td>
+                    <td>{{ ++$key }}</td>
                     <td>
-                    <a href="javascript:void(0)" class="avatar"><img alt="avatar" src="{{asset('book/'.$item->image)}}" width="60px" height="90px"></a>
+                      <a href="javascript:void(0)" class="avatar">
+                        <img alt="avatar" src="@if(!empty($item->image)) {{ asset('book/'.$item->image) }} @else {{ asset('book/default.png') }} @endif" width="60px" height="90px">
+                      </a>
                     </td>
-                    <td>{{$item->book_english_name}}</td>
-                    <td>{{$item->book_bangla_name}}</td>
-                    <td>{{$item->category->name}}</td>
-                    <td>{{$item->writer->writer_name}}</td>
-                    <td>{{$item->price}}</td>
-                    <td>{{$item->short_description}}</td>
-                    <td>{{$item->publising_date}}</td>
-                    <td>{{$item->book_of_page}}</td>
+                    <td>{{ $item->book_english_name }}</td>
+                    <td>{{ $item->book_bangla_name }}</td>
+                    <td>{{ $item->category->name }}</td>
+                    <td>{{ $item->writer->writer_name }}</td>
+                    <td>{{ $item->price }}</td>
+                    <td>{{ $item->short_description }}</td>
+                    <td>{{ $item->publising_date }}</td>
+                    <td>{{ $item->book_of_page }}</td>
                     <td>
-                      <a class="btn btn-secondary" href="{{route('boi.edit', $item->id)}}"><i class="fa-solid fa-pen-to-square"></i></a>
-
-                      <a class="btn btn-danger" href="{{route('boi.delete', $item->id)}}" onclick="return confirm('Are you sure to delete')"><i class="fa-solid fa-trash"></i></a>
+                      <a class="btn btn-secondary" href="{{ route('boi.edit', $item->id) }}"><i class="fa-solid fa-pen-to-square"></i></a>
+                      <a class="btn btn-danger" href="{{ route('boi.delete', $item->id) }}" onclick="return confirm('Are you sure to delete?')"><i class="fa-solid fa-trash"></i></a>
                     </td>
                   </tr>
                   @endforeach
-
                 </tbody>
               </table>
             </div>

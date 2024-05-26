@@ -58,12 +58,6 @@
                                     <label for="exampleInputPassword1">Short Description</label>
                                     <textarea name="short_description" class="form-control"></textarea>
                                 </div>
-                                <div class="form-group mb-0">
-                                    <div class="custom-control custom-checkbox">
-                                        <input type="checkbox" name="terms" class="custom-control-input" id="exampleCheck1">
-                                        <label class="custom-control-label" for="exampleCheck1">I agree to the <a href="#">terms of service</a>.</label>
-                                    </div>
-                                </div>
                             </div>
                             <!-- /.card-body -->
                             <div class="card-footer">

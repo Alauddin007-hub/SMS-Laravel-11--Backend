@@ -38,19 +38,22 @@ class BookController extends Controller
             'book_bangla_name' => 'required',
             'category_id' => 'required',
             'writer_id' => 'required',
+            'price' => 'required',
             'short_description' => 'required|max:150',
-            'image' => 'image|mimes:jpg,jpeg,png,gif',
+            'image' => 'image|mimes:jpg,jpeg,png,gif|size:2048',
         ]);
-        // $imageName = Null;
-        $imageName = time() . '.' . $request->image->extension();
 
-
-        // dd($imageName);
-
-
-        if ($validated) {
+        $imageName = Null;
+        if($request->hasFile('image'))
+        {
+            $imageName = time() . '.' . $request->image->extension();
             $request->image->move(('book'), $imageName);
-
+        }
+        // dd($imageName);
+        
+        
+        if ($validated) {
+            
             $data = [
                 'book_english_name' => $request->book_english_name,
                 'book_bangla_name' => $request->book_bangla_name,
@@ -62,7 +65,7 @@ class BookController extends Controller
                 'image' => $imageName,
             ];
             // dd($data);
-          Book::create($data);
+            Book::create($data);
 
             // $book->update($data);
             return redirect('/boi')->with('success', "Book has been added Successfully");
@@ -99,17 +102,20 @@ class BookController extends Controller
             'category_id' => 'required',
             'writer_id' => 'required',
             'short_description' => 'required|max:150',
-            'image' => 'image|mimes:jpg,jpeg,png,gif',
+            'image' => 'image|mimes:jpg,jpeg,png,gif|size:2048',
         ]);
-        // $imageName = Null;
-        $imageName = time() . '.' . $request->image->extension();
 
+        $imageName = Null;
+        if($request->hasFile('image'))
+        {
+            $imageName = time() . '.' . $request->image->extension();
+            $request->image->move(('book'), $imageName);
+        }
 
         // dd($imageName);
 
 
         if ($validated) {
-            $request->image->move(('book'), $imageName);
 
             $data = [
                 'book_english_name' => $request->book_english_name,

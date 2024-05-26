@@ -43,6 +43,19 @@ class StockController extends Controller
             'quantity' => $request->quantity,
             'price' => $request->price,
         ]);
+
+        
+        $check = Book::where('id', $request->book_id)->first();
+        // dd($check);
+        $price = $request->price;
+        // Book::update($request->id);
+        // dd($price);
+        if($check)
+        {
+
+            $check->price += $price;
+            $check->save;
+        }
     
         $stock = Stock::where('book_id', $request->book_id)->first();
     

@@ -32,16 +32,19 @@ class WriterController extends Controller
         $validated = $request->validate([
             'writer_name' => 'required',
             'short_description' => 'required|max:150',
-            'image' => 'image|mimes:jpg,jpeg,png,gif',
+            'image' => 'image|mimes:jpg,jpeg,png,gif|size:2048',
         ]);
-        // $imageName = Null;
-        $imageName = time() . '.' . $request->image->extension();
+        $imageName = Null;
+        if($request->hasFile('image'))
+        {
+            $imageName = time() . '.' . $request->image->extension();
+            $request->image->move(('writer'), $imageName);
+        }
 
 
         // echo $imageName;
 
         if ($validated) {
-            $request->image->move(('writer'), $imageName);
 
             $data = [
                 'writer_name' => $request->writer_name,
@@ -81,17 +84,19 @@ class WriterController extends Controller
         $validated = $request->validate([
             'writer_name' => 'required',
             'short_description' => 'required|max:150',
-            'image' => 'image|mimes:jpg,jpeg,png,gif',
+            'image' => 'image|mimes:jpg,jpeg,png,gif|size:2048',
         ]);
-        // $imageName = Null;
-        $imageName = time() . '.' . $request->image->extension();
-
+        $imageName = Null;
+        if($request->hasFile('image'))
+        {
+            $imageName = time() . '.' . $request->image->extension();
+            $request->image->move(('writer'), $imageName);
+        }
 
         // dd($imageName);
 
 
         if ($validated) {
-            $request->image->move(('writer'), $imageName);
 
             $data = [
                 'writer_name' => $request->writer_name,

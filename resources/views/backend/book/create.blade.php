@@ -81,8 +81,12 @@
                                     <textarea name="short_description" class="form-control"></textarea>
                                 </div>
                                 <div class="form-group">
-                                    <label for="image">image</label>
+                                    <label for="image">Image</label>
                                     <input type="file" name="image" class="form-control">
+                                </div>
+                                <div class="form-group">
+                                    <label for="image">Price</label>
+                                    <input type="number" name="price" class="form-control">
                                 </div>
                                 <div class="form-group">
                                     <label for="publising_date">Publishing Date</label>

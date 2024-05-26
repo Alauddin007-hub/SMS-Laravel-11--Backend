@@ -118,7 +118,7 @@
 <script src="{{asset('')}}assets/plugins/jquery-validation/jquery.validate.min.js"></script>
 <script src="{{asset('')}}assets/plugins/jquery-validation/additional-methods.min.js"></script>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
+<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script> -->
 </body>
 
 </html>

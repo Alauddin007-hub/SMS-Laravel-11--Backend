@@ -16,6 +16,7 @@ class Book extends Model
         'writer_id',
         'short_description',
         'image',
+        'price',
         'publising_date',
         'book_of_page',
         'status',

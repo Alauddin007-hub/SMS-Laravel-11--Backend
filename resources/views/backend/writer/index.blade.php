@@ -58,7 +58,7 @@
                   <tr>
                     <td>{{++$key}}</td>
                     <td>
-                    <a href="javascript:void(0)" class="avatar"><img alt="avatar" src="@if(empty($employee->avatar)) {{asset('writer/'.$item->image)}} @else writer/defult.png @endif" width="60px" height="90px"></a>
+                    <a href="javascript:void(0)" class="avatar"><img alt="avatar" src="@if(!empty($item->image)) {{asset('writer/'.$item->image)}} @else {{asset('writer/default.png ')}}@endif" width="60px" height="90px"></a>
                     </td>
                     <td>{{$item->writer_name}}</td>
                     <td>{{$item->short_description}}</td>

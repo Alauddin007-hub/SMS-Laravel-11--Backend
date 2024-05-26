@@ -23,7 +23,7 @@ Route::get('/dashboard', function () {
 Route::get('/create', [AuthController::class, 'index'])->name('registration');
 Route::post('/register', [AuthController::class, 'registration'])->name('register');
 Route::get('/', [AuthController::class, 'create'])->name('login');
-Route::pot('/login/store', [AuthController::class, 'login'])->name('login.store');
+Route::post('/login/store', [AuthController::class, 'login'])->name('login.store');
 Route::get('/forget', [AuthController::class, 'forgot'])->name('forgot');
 
 // Writer
@@ -68,6 +68,8 @@ Route::post('/customer/update/{id}', [CustomerController::class, 'update'])->nam
 Route::get('/customer/delete/{id}', [CustomerController::class, 'destroy'])->name('customer.delete');
 
 // Transaction or Sales
+Route::get('/transaction', [TransactionController::class, 'index'])->name('transactions.index');
+
 Route::get('/transactions/create', [TransactionController::class, 'create'])->name('transactions.create');
 
 Route::get('/books/search', [TransactionController::class, 'searchBooks'])->name('books.search');
