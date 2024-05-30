@@ -40,7 +40,7 @@ class BookController extends Controller
             'writer_id' => 'required',
             'price' => 'required',
             'short_description' => 'required|max:150',
-            'image' => 'image|mimes:jpg,jpeg,png,gif|size:2048',
+            'image' => 'image|mimes:jpg,jpeg,png,gif|max:2048',
         ]);
 
         $imageName = Null;
@@ -102,7 +102,7 @@ class BookController extends Controller
             'category_id' => 'required',
             'writer_id' => 'required',
             'short_description' => 'required|max:150',
-            'image' => 'image|mimes:jpg,jpeg,png,gif|size:2048',
+            'image' => 'image|mimes:jpg,jpeg,png,gif|max:2048',
         ]);
 
         $imageName = Null;

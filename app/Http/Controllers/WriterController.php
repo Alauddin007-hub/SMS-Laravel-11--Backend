@@ -32,7 +32,7 @@ class WriterController extends Controller
         $validated = $request->validate([
             'writer_name' => 'required',
             'short_description' => 'required|max:150',
-            'image' => 'image|mimes:jpg,jpeg,png,gif|size:2048',
+            'image' => 'image|mimes:jpg,jpeg,png,gif|max:2048',
         ]);
         $imageName = Null;
         if($request->hasFile('image'))
@@ -84,7 +84,7 @@ class WriterController extends Controller
         $validated = $request->validate([
             'writer_name' => 'required',
             'short_description' => 'required|max:150',
-            'image' => 'image|mimes:jpg,jpeg,png,gif|size:2048',
+            'image' => 'image|mimes:jpg,jpeg,png,gif|max:2048',
         ]);
         $imageName = Null;
         if($request->hasFile('image'))
